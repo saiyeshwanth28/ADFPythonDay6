@@ -101,7 +101,8 @@ class UserDataInput:
         if self.salary>10000 and self.salary < 90000:
             return True
         return False
-    '''def validatingRequest(self):
+    def validatingRequest(self):
+      """ checking the eligibilty of same pan number request within 5 days"""
         con = self.Connection()
         cursor = con.cursor()
         cursor.execute("select request_receive_time from request_info where PAN_Number = %s", (self.pan_number,))
@@ -115,7 +116,7 @@ class UserDataInput:
                 if x <flag:
                     flag=x
             return flag>5
-        return True'''
+        return True
                     
     def insertDataInResponseTable(self):
         try:
@@ -133,6 +134,8 @@ class UserDataInput:
                 reason+="Inavalid state "
             if not self.validatingSalary():
                 reason+="salary not in given range "
+            if not self.ValidatingRequest():
+                reason+="request received on same pan should not be less than 5 days"
             if reason == '':
                 response+="success"
             else:
